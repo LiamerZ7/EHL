@@ -1,0 +1,2 @@
+import { sqliteTable, text, index } from 'drizzle-orm/sqlite-core';
+export const entries = sqliteTable('entries', { id:text('id').primaryKey(), userId:text('user_id').notNull(), pillar:text('pillar').notNull(), title:text('title').notNull(), kind:text('kind').notNull(), status:text('status').notNull(), day:text('day').notNull(), data:text('data').notNull(), created:text('created').notNull() },t=>[index('entries_user_day').on(t.userId,t.day)]);
