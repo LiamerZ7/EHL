@@ -33,6 +33,29 @@ pnpm build
 
 The hosted application uses the Sites platform for deployment, a D1 binding named `DB`, and ChatGPT sign-in. `app/chatgpt-auth.ts` reads identity headers supplied by that trusted platform. A standalone deployment must implement trusted authentication and database provisioning before enabling saved progress; it must never trust arbitrary client-supplied identity headers. Without a signed-in identity, visitors can explore content but cannot save entries.
 
+## Deploying to Vercel
+
+Import `LiamerZ7/EHL` into Vercel with the repository root (`./`) selected.
+The committed `vercel.json` selects Next.js, installs the pinned pnpm lockfile
+and runs `pnpm run build:vercel`, producing `.next`. Use Node.js 24.x.
+Do not override the output directory with `dist` or use the Sites build command.
+
+To verify the Vercel build locally:
+
+```sh
+pnpm run build:vercel
+VERCEL=1 pnpm exec next start
+```
+
+Vercel serves the framework, exercises and breathing timer. Account sign-in and
+saved reflections remain on the existing Sites application, linked from the
+banner. Vercel does not have the Sites authentication gateway or Cloudflare D1
+binding. Its account API rejects requests, including spoofed identity headers;
+no reflection data is copied or stored on Vercel. Native Vercel accounts and
+storage would require a separate authentication/database integration.
+
+The existing `dev`, `build` and `start` commands remain for Sites/Cloudflare.
+
 ## Source map
 
 - `app/content.ts`: framework explanations and exercise library.
